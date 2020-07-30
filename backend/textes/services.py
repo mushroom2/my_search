@@ -14,15 +14,18 @@ class EmbeddingService(object):
 
     @classmethod
     def init_vectorizer(cls):
-        embed = hub.load('textes/data')
-        text_ph = tf.placeholder(tf.string)
-        embeddings = embed.signatures['default'](text_ph)
-        session = tf.Session()
-        session.run(tf.global_variables_initializer())
-        session.run(tf.tables_initializer())
-        return session, embeddings, text_ph
+        g = tf.Graph()
+        with g.as_default():
+            text_input = tf.placeholder(dtype=tf.string, shape=[None])
+            embed = hub.Module('textes/data')
+            embedded_text = embed(text_input)
+            init_op = tf.group([tf.global_variables_initializer(), tf.tables_initializer()])
+        g.finalize()
+        session = tf.Session(graph=g)
+        session.run(init_op)
+        return session, embedded_text, text_input
 
     @classmethod
-    def vectorize_sentence(cls, sentence: str, tf_session: tf.Session, embeddings, text_placeholder) -> list:
-        vectors = tf_session.run(embeddings, feed_dict={text_placeholder: sentence})
-        a = 10
+    def vectorize_sentence(cls, sentence: str, session, embedded_text, text_input) -> list:
+        vectors = session.run(embedded_text, feed_dict={text_input: [sentence]})
+        return [vector.tolist() for vector in vectors]
