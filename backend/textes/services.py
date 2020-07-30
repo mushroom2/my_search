@@ -1,8 +1,11 @@
 import re
+from typing import List
 import nltk
 
 import tensorflow.compat.v1 as tf
 import tensorflow_hub as hub
+
+from .models import Sentence
 
 
 class EmbeddingService(object):
@@ -26,6 +29,21 @@ class EmbeddingService(object):
         return session, embedded_text, text_input
 
     @classmethod
-    def vectorize_sentence(cls, sentence: str, session, embedded_text, text_input) -> list:
-        vectors = session.run(embedded_text, feed_dict={text_input: [sentence]})
+    def vectorize_sentences(cls, sentences: List[str] , session, embedded_text, text_input) -> list:
+        vectors = session.run(embedded_text, feed_dict={text_input: sentences})
         return [vector.tolist() for vector in vectors]
+
+    @classmethod
+    def create_vectors(cls, sentences: List[str]):
+        tf_session, embeddings, text_ph = EmbeddingService.init_vectorizer()
+        return cls.vectorize_sentences(sentences, tf_session, embeddings, text_ph)
+
+    @classmethod
+    def save_vectorized_sentences(cls, sentences: List[str], raw_text_id: int):
+        to_save = []
+        session, embedded_text, text_input = cls.init_vectorizer()
+        vectors = cls.vectorize_sentences(sentences, session, embedded_text, text_input)
+        for _index, sentence in enumerate(sentences):
+            to_save.append(Sentence(content=sentence, text_id=raw_text_id, vectors=vectors[_index]))
+        return Sentence.objects.bulk_create(to_save)
+

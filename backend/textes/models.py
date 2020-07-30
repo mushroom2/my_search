@@ -1,5 +1,6 @@
 from django.db import models
 from django.db.models import TextField, DateTimeField, ForeignKey, FloatField, CASCADE
+from django.contrib.postgres.fields import ArrayField
 
 
 class RawText(models.Model):
@@ -10,8 +11,4 @@ class RawText(models.Model):
 class Sentence(models.Model):
     content = TextField()
     text = ForeignKey(RawText, on_delete=CASCADE, related_name='sentences')
-
-
-class Vector(models.Model):
-    value = FloatField()
-    sentence = ForeignKey(Sentence, on_delete=CASCADE, related_name='vectors')
+    vectors = ArrayField(FloatField(), default=list)
