@@ -15,6 +15,8 @@ class Command(BaseCommand):
         super().__init__(*args, **kwargs)
 
     def handle(self, *args, **options):
+        if not os.path.exists('textes/data'):
+            os.mkdir('textes/data')
         self.logger.info(f'Download started')
         http = urllib3.PoolManager()
         r = http.request('GET', 'https://tfhub.dev/google/universal-sentence-encoder/2?tf-hub-format=compressed')

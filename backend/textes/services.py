@@ -29,7 +29,8 @@ class EmbeddingService(object):
         return session, embedded_text, text_input
 
     @classmethod
-    def vectorize_sentences(cls, sentences: List[str] , session, embedded_text, text_input) -> list:
+    def vectorize_sentences(cls, sentences: List[str], session: tf.Session,
+                            embedded_text, text_input: tf.placeholder) -> list:
         vectors = session.run(embedded_text, feed_dict={text_input: sentences})
         return [vector.tolist() for vector in vectors]
 
@@ -46,4 +47,3 @@ class EmbeddingService(object):
         for _index, sentence in enumerate(sentences):
             to_save.append(Sentence(content=sentence, text_id=raw_text_id, vectors=vectors[_index]))
         return Sentence.objects.bulk_create(to_save)
-

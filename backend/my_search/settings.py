@@ -20,7 +20,8 @@ INSTALLED_APPS = [
 
     'rest_framework',
 
-    'textes.apps.TextConfig'
+    'textes.apps.TextConfig',
+    'es_items.apps.EsItemsConfig'
 ]
 
 MIDDLEWARE = [
