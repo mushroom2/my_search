@@ -16,6 +16,8 @@ services:
       - '9200:9200'
     environment:
       - discovery.type=single-node
+      - http.max_content_length=10mb
+      - http.max_initial_line_length=10mb
   my_search_backend:
     container_name: my_search_backend
     depends_on:

@@ -16,7 +16,7 @@ class EmbeddingService(object):
         return nltk.tokenize.sent_tokenize(clear_raw_text)
 
     @classmethod
-    def init_vectorizer(cls):
+    def init_vectorizer(cls) -> tuple:
         g = tf.Graph()
         with g.as_default():
             text_input = tf.placeholder(dtype=tf.string, shape=[None])
@@ -40,10 +40,11 @@ class EmbeddingService(object):
         return cls.vectorize_sentences(sentences, tf_session, embeddings, text_ph)
 
     @classmethod
-    def save_vectorized_sentences(cls, sentences: List[str], raw_text_id: int):
+    def save_vectorized_sentences(cls, sentences: List[str], raw_text_id: int) -> List[Sentence]:
         to_save = []
         session, embedded_text, text_input = cls.init_vectorizer()
         vectors = cls.vectorize_sentences(sentences, session, embedded_text, text_input)
         for _index, sentence in enumerate(sentences):
             to_save.append(Sentence(content=sentence, text_id=raw_text_id, vectors=vectors[_index]))
+        session.close()
         return Sentence.objects.bulk_create(to_save)

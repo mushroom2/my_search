@@ -1,4 +1,4 @@
-from rest_framework.generics import ListCreateAPIView
+from rest_framework.generics import ListCreateAPIView, RetrieveAPIView
 from rest_framework.response import Response
 
 from .models import RawText
@@ -20,3 +20,8 @@ class RawTextView(ListCreateAPIView):
         EsItemsService.add_sentences_to_index(sentences_qs, es_client)
         serializer = self.get_serializer(created_text)
         return Response(serializer.data)
+
+
+class RawTextRetrieveView(RetrieveAPIView):
+    queryset = RawText.objects.all()
+    serializer_class = RawTextSerizlizer
