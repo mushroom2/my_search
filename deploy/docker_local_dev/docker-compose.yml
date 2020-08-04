@@ -39,7 +39,7 @@ services:
       - '8000:8000'
     volumes:
       - ../../backend:/app
-    command: python /app/manage.py runserver 0:8000
+    command: /bin/bash /app/entry_point.sh
   my_search_frontend:
     container_name: my_search_frontend
     depends_on:

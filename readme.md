@@ -37,5 +37,15 @@ docker-compose up
 - in new terminal tab
 ```bash
 docker exec -it my_search_backend python manage.py fetch_vectorizer
+docker exec -it my_search_backend python manage.py reindex_items
 ```
-- enjoy!
+- Go to ```127.0.0.1``` in your browser
+- Enjoy!
+
+
+#### Road map
+
+- Implement Tensorflow REST server
+- Elasticsearch pagination
+- Tests
+
