@@ -34,7 +34,7 @@
 ```bash
 docker-compose up
 ```
--in new terminal tab
+- in new terminal tab
 ```bash
 docker exec -it my_search_backend python manage.py fetch_vectorizer
 ```
