@@ -33,7 +33,9 @@
 - cd ./my_search/docker_local_dev
 ```bash
 docker-compose up
-docker ps
+```
+-in new terminal tab
+```bash
 docker exec -it my_search_backend python manage.py fetch_vectorizer
 ```
 - enjoy!
