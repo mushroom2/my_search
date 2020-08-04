@@ -1,4 +1,5 @@
 # My search
+![alt text][logo]
 
 [logo]: https://media.giphy.com/media/Lr4BQSMAOJfV2TYEmT/giphy.gif "Demo Gif"
 
