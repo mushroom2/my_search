@@ -9,4 +9,4 @@ class EsItemSerializer(Serializer):
     content = CharField(source='_source.content')
 
     def get__score(self, hit):
-        return (hit['_score'] - 1) * 100
+        return round(((hit['_score'] - 1) * 100), 1)
